@@ -33,14 +33,26 @@ namespace App {
         if (m_exit_status == 1) {
             return m_exit_status;
         }
-          IMGUI_CHECKVERSION();
-          ImGui::CreateContext();
-          ImGuiIO& io{ImGui::GetIO()};
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io{ImGui::GetIO()};
 
-          io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-          io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-          // Enable docking
-          io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        // Enable docking
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+        const float font_scaling_factor{m_window->get_scale()};
+        const float font_size{18.0F * font_scaling_factor};
+
+        //Load font and set as default with proper scaling
+        io.Fonts->AddFontFromFileTTF(
+                "fonts/Manrope.ttf",
+                font_size);
+        io.FontDefault = io.Fonts->AddFontFromFileTTF(
+                "fonts/Manrope.ttf",
+                font_size);
+        io.FontGlobalScale = 1.0F / font_scaling_factor;
 
         // Setup Platform/Renderer backends
         ImGui_ImplSDL2_InitForSDLRenderer(
@@ -75,7 +87,6 @@ namespace App {
             if (!m_minimized)
             {
                 ImGui::DockSpaceOverViewport();
-                ImGui::DockSpace(ImGui::GetID("DockSpace"));
                 if (ImGui::BeginMainMenuBar())
                 {
                     if (ImGui::BeginMenu("File"))
